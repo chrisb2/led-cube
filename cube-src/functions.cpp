@@ -12,7 +12,7 @@ void delay_ms(uint16_t x)
 {
     Particle.process();
 
-    x = x * 12;
+    x = x * 14;
     uint8_t y, z;
     for ( ; x > 0 ; x--) {
         for ( y = 0 ; y < 90 ; y++) {
