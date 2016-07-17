@@ -5,15 +5,9 @@
 #include <string.h>
 #include <math.h>
 
-/*
-You may check out our instructables for more detail at http://www.instructables.com/id/JolliCube-an-8x8x8-LED-Cube-SPI/
-https://docs.particle.io/reference/firmware/photon/#spi
-*/
-
-// SYSTEM_MODE(SEMI_AUTOMATIC);
-
 #define REFRESH_INTERVAL_MS 8
 #define SPI_CS A2 // This SPI Chip Select pin controls the MAX7219
+#define FUNC_CNT 5
 
 byte value[8];
 volatile int current_layer = 0;
@@ -21,11 +15,15 @@ volatile int current_layer = 0;
 Timer timer(REFRESH_INTERVAL_MS, display);
 
 volatile int commandValue = 0;
-int effectValue = 0;
+
+typedef void (*FP)();
+
+const FP effects[FUNC_CNT] = {&effect_intro, &fireworks, &effect_rain, &effect_random_sparkle, &effect_random_filler};
 
 //***********************************************************************************************************************
 void setup()
 {
+
     pinMode(SPI_CS, OUTPUT);
     SPI.begin();
 
@@ -36,39 +34,24 @@ void setup()
     maxTransferAll(0x0A, 0x0F);   // Set Brightness Intensity
 
     timer.start();
-    
+
     Particle.function("ledcube", control);
 }
 
 void loop()
 {
-    if (commandValue == 1) {
-        fireworks(15, 15, 500);
+    if (commandValue != 0) {
+        effects[commandValue]();
         delay(100);
     } else {
-        switch (effectValue) {
-            case 0:
-                effect_intro();
+        for (int i=0; i < FUNC_CNT; i++) {
+            effects[i]();
+            if (commandValue != 0) {
                 break;
-            case 1:
-                effect_rain(100);
-                delay(100);
-                effect_random_sparkle();
-                delay(100);
-                effect_random_filler(75, 1);
-                break;
-            case 2:
-                fireworks(15, 15, 500);
-                break;
+            }
+            delay(100);
         }
-        
-        effectValue++;
-        if (effectValue == 3) {
-            effectValue = 0;
-        }
-        
-        delay(100);
-        
+
         // effect_rand_patharound(200,500);
         // delay(100);
         // effect_wormsqueeze (2, AXIS_Z, -1, 100, 1000);
@@ -129,6 +112,9 @@ void loop()
 int control(String args)
 {
     commandValue = args.toInt();
+    if (commandValue >= FUNC_CNT || commandValue < 0) {
+        commandValue = 0;
+    }
     return commandValue;
 }
 

@@ -5,14 +5,14 @@ volatile unsigned char cube[8][8];
 //***********************************************************************************************************************
 // Delay loop.
 // This is not calibrated to milliseconds,
-// but we had allready made to many effects using this
+// but we had already made to many effects using this
 // calibration when we figured it might be a good idea
 // to calibrate it.
 void delay_ms(uint16_t x)
 {
     Particle.process();
 
-    x = x * 8;
+    x = x * 12;
     uint8_t y, z;
     for ( ; x > 0 ; x--) {
         for ( y = 0 ; y < 90 ; y++) {

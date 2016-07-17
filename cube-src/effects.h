@@ -3,12 +3,15 @@
 #include "cube.h"
 #include "functions.h"
 
+void effect_rain();
 void effect_rain (int iterations);
+void fireworks();
 void fireworks (int iterations, int n, int delay);
 void effect_random_sparkle (void);
 void effect_wormsqueeze (int size, int axis, int direction, int iterations, int delay);
 void sinelines (int iterations, int delay);
 void effect_planboing (int plane, int speed);
+void effect_random_filler();
 void effect_random_filler (int delay, int state);
 void zoom_pyramid_clear();
 void zoom_pyramid();

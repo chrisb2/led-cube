@@ -1,5 +1,9 @@
 #include "effects.h"
 
+void effect_rain () {
+    effect_rain(100);
+}
+
 void effect_rain (int iterations)
 {
     int i, ii;
@@ -21,6 +25,10 @@ void effect_rain (int iterations)
         delay_ms(1000);
         shift(AXIS_Z,-1);
     }
+}
+
+void fireworks() {
+    fireworks(15, 15, 500);
 }
 
 void fireworks (int iterations, int n, int delay)
@@ -224,6 +232,10 @@ void effect_planboing (int plane, int speed)
         setplane(plane,i);
         delay_ms(speed);
     }
+}
+
+void effect_random_filler() {
+    effect_random_filler(75, 1);
 }
 
 // Set or clear exactly 512 voxels in a random order.
