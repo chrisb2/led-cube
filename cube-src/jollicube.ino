@@ -15,7 +15,7 @@ volatile int current_layer = 0;
 
 Timer timer(REFRESH_INTERVAL_MS, display);
 
-volatile int sequenceValue = 2; // in order
+volatile int sequenceValue = 1; // in order
 volatile int effectValue = 0; // intro
 int currentEffect = effectValue;
 
@@ -53,18 +53,18 @@ void loop()
 {
     switch(sequenceValue) {
         case 0:
-            // Single effect
-            break;
-        case 1:
             // Go through effects in random order
             effectValue = random(FUNC_CNT - 1);
             break;
-        case 2:
+        case 1:
             // Go through effects in order
             effectValue++;
             if (effectValue == FUNC_CNT) {
                 effectValue = 0;
             }
+            break;
+        default:
+            // Single effect
             break;
     }
 
@@ -76,7 +76,7 @@ void loop()
 int effect(String args)
 {
     int value = args.toInt();
-    if (value >= FUNC_CNT || value < 0) {
+    if (value < 0 || value >= FUNC_CNT) {
         effectValue = 0;
     } else {
         effectValue = value;
@@ -105,7 +105,7 @@ int power(String args) {
 
 int sequence(String args) {
     int value = args.toInt();
-    if (value >= 0 || value < 3) {
+    if (value >= 0 || value < 2) {
         sequenceValue = value;
     }
     return sequenceValue;
