@@ -1,0 +1,11 @@
+{
+  "c": {
+    "configPath": "C:\aProject\led-cube\uncrustify.cfg"
+  },
+  "cpp": {
+      "configPath": "C:\aProject\led-cube\uncrustify.cfg"
+  },
+  "arduino": {
+    "configPath": "C:\aProject\led-cube\uncrustify.cfg"
+  }
+}
