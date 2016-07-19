@@ -15,8 +15,8 @@ volatile int current_layer = 0;
 
 Timer timer(REFRESH_INTERVAL_MS, display);
 
-volatile int sequenceValue = 2;
-volatile int effectValue = 0;
+volatile int sequenceValue = 2; // in order
+volatile int effectValue = 0; // intro
 int currentEffect = effectValue;
 
 typedef void (*FP)();
@@ -51,26 +51,24 @@ void loop()
 {
     switch(sequenceValue) {
         case 0:
-            effects[effectValue]();
-            delay(100);
+            // Single effect
             break;
         case 1:
             // Go through effects in random order
             effectValue = random(FUNC_CNT - 1);
-            effects[effectValue]();
-            delay(100);
             break;
         case 2:
             // Go through effects in order
-            effects[effectValue]();
-            delay(100);
             effectValue++;
             if (effectValue == FUNC_CNT) {
                 effectValue = 0;
             }
             break;
     }
+
     currentEffect = effectValue;
+    effects[effectValue]();
+    delay(100);
 
     // effect_rand_patharound(200,500);
     // delay(100);
