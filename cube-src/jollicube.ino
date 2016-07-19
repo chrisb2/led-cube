@@ -57,7 +57,7 @@ void loop()
             effectValue = random(FUNC_CNT - 1);
             break;
         case 1:
-            // Go through effects in order
+            // Go through effects in fix order
             effectValue++;
             if (effectValue == FUNC_CNT) {
                 effectValue = 0;
@@ -98,7 +98,7 @@ int power(String args) {
     if (power == 0 || power == 1) {
         maxTransferAll(0x0C, power);
     } else {
-        power = 1;
+        power = -1;
     }
     return power;
 }
