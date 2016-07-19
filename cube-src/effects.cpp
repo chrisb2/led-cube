@@ -138,6 +138,10 @@ void effect_random_sparkle (void)
 
 }
 
+void effect_wormsqueeze() {
+    effect_wormsqueeze(2, AXIS_Z, -1, 100, 1000);
+}
+
 void effect_wormsqueeze (int size, int axis, int direction, int iterations, int delay)
 {
     int x, y, i,j,k, dx, dy;
@@ -185,6 +189,10 @@ void effect_wormsqueeze (int size, int axis, int direction, int iterations, int 
     }
 }
 
+void sinelines() {
+    sinelines(2000,10);
+}
+
 void sinelines (int iterations, int delay)
 {
     int i,x;
@@ -213,6 +221,12 @@ void sinelines (int iterations, int delay)
         delay_ms(delay);
         fill(0x00);
     }
+}
+
+void effect_planboing () {
+    effect_planboing(AXIS_Z, 900);
+    effect_planboing(AXIS_Y, 900);
+    effect_planboing(AXIS_X, 900);
 }
 
 // Draw a plane on one axis and send it back and forth once.
@@ -266,6 +280,11 @@ void effect_random_filler (int delay, int state)
             loop++;
         }
     }
+}
+
+void pyramid() {
+    zoom_pyramid();
+    zoom_pyramid_clear();
 }
 
 void zoom_pyramid_clear() {
@@ -406,6 +425,15 @@ void zoom_pyramid() {
     delay_ms(10000);
 }
 
+void effect_boxside_randsend_parallel() {
+    effect_boxside_randsend_parallel (AXIS_X, 0, 150, 1);
+    effect_boxside_randsend_parallel (AXIS_X, 1, 150, 1);
+    effect_boxside_randsend_parallel (AXIS_Y, 0, 150, 1);
+    effect_boxside_randsend_parallel (AXIS_Y, 1, 150, 1);
+    effect_boxside_randsend_parallel (AXIS_Z, 0, 150, 1);
+    effect_boxside_randsend_parallel (AXIS_Z, 1, 150, 1);
+}
+
 void effect_boxside_randsend_parallel (char axis, int origin, int delay, int mode)
 {
     int i;
@@ -478,6 +506,17 @@ void effect_boxside_randsend_parallel (char axis, int origin, int delay, int mod
 
 }
 
+void effect_axis_updown_randsuspend() {
+    effect_axis_updown_randsuspend(AXIS_Z, 550,5000,0);
+    effect_axis_updown_randsuspend(AXIS_Z, 550,5000,1);
+    effect_axis_updown_randsuspend(AXIS_Z, 550,5000,0);
+    effect_axis_updown_randsuspend(AXIS_Z, 550,5000,1);
+    effect_axis_updown_randsuspend(AXIS_X, 550,5000,0);
+    effect_axis_updown_randsuspend(AXIS_X, 550,5000,1);
+    effect_axis_updown_randsuspend(AXIS_Y, 550,5000,0);
+    effect_axis_updown_randsuspend(AXIS_Y, 550,5000,1);
+}
+
 void effect_axis_updown_randsuspend (char axis, int delay, int sleep, int invert)
 {
     unsigned char positions[64];
@@ -534,6 +573,10 @@ void effect_axis_updown_randsuspend (char axis, int delay, int sleep, int invert
         draw_positions_axis (axis, positions,invert);
         delay_ms(delay);
     }
+}
+
+void linespin() {
+    linespin(1500,20);
 }
 
 void linespin (int iterations, int delay)
@@ -835,6 +878,10 @@ int totty_cos(unsigned char LUT[65],int cos_of)
         return LUT[cos_of];
 }
 
+void int_ripples() {
+    int_ripples(600,400);
+}
+
 void int_ripples(int iterations, int delay)
 {
     // 16 values for square root of a^2+b^2.  index a*4+b = 10*sqrt
@@ -864,6 +911,10 @@ void int_ripples(int iterations, int delay)
             }
         delay_ms(delay);
     }
+}
+
+void side_ripples() {
+    side_ripples(600,400);
 }
 
 void side_ripples(int iterations, int delay)
@@ -902,6 +953,10 @@ void side_ripples(int iterations, int delay)
     }
 }
 
+void mirror_ripples() {
+    mirror_ripples(600,400);
+}
+
 void mirror_ripples(int iterations, int delay)
 {
     // 16 values for square root of a^2+b^2.  index a*4+b = 10*sqrt
@@ -936,6 +991,10 @@ void mirror_ripples(int iterations, int delay)
             }
         delay_ms(delay);
     }
+}
+
+void quad_ripples() {
+    quad_ripples(15, 500);
 }
 
 void quad_ripples(int iterations, int delay)
@@ -1047,6 +1106,10 @@ void effect_pathmove (unsigned char *path, int length)
     }
     for (i=0;i<8;i++)
         clrvoxel(((path[0]>>4) & 0x0f), (path[0] & 0x0f),i);
+}
+
+void effect_rand_patharound() {
+    effect_rand_patharound(200,500);
 }
 
 void effect_rand_patharound (int iterations, int delay)

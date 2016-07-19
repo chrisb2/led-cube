@@ -7,7 +7,7 @@
 
 #define REFRESH_INTERVAL_MS 8
 #define SPI_CS A2 // This SPI Chip Select pin controls the MAX7219
-#define FUNC_CNT 5
+#define FUNC_CNT 17
 #define MAX_INTENSITY 15
 
 byte value[8];
@@ -21,7 +21,9 @@ int currentEffect = effectValue;
 
 typedef void (*FP)();
 
-const FP effects[FUNC_CNT] = {&effect_intro, &fireworks, &effect_rain, &effect_random_sparkle, &effect_random_filler};
+const FP effects[FUNC_CNT] = {&effect_intro, &fireworks, &effect_rain, &effect_random_sparkle, &effect_random_filler,
+    &effect_wormsqueeze, &sinelines, &linespin, &effect_planboing, &effect_boxside_randsend_parallel, &effect_axis_updown_randsuspend,
+    &int_ripples, &side_ripples, &mirror_ripples, &quad_ripples, &effect_rand_patharound, &pyramid};
 
 //***********************************************************************************************************************
 void setup()
@@ -69,61 +71,6 @@ void loop()
     currentEffect = effectValue;
     effects[effectValue]();
     delay(100);
-
-    // effect_rand_patharound(200,500);
-    // delay(100);
-    // effect_wormsqueeze (2, AXIS_Z, -1, 100, 1000);
-    // delay(100);
-    // zoom_pyramid();
-    // delay(100);
-    // zoom_pyramid_clear();
-    // delay(100);
-    // sinelines(2000,10);
-    // delay(100);
-    // linespin(1500,20);
-    // delay(150);
-    // effect_planboing(AXIS_Z, 900);
-    // delay(100);
-    // effect_planboing(AXIS_Y, 900);
-    // delay(100);
-    // effect_planboing(AXIS_X, 900);
-    // delay(100);
-    // mirror_ripples(600,400);
-    // delay(100);
-    // side_ripples(600,400);
-    // delay(100);
-    // int_ripples(600,400);
-    // delay(100);
-    // quad_ripples(15, 500);
-    // delay(100);
-    // effect_axis_updown_randsuspend(AXIS_Z, 550,5000,0);
-    // delay(100);
-    // effect_axis_updown_randsuspend(AXIS_Z, 550,5000,1);
-    // delay(100);
-    // effect_axis_updown_randsuspend(AXIS_Z, 550,5000,0);
-    // delay(100);
-    // effect_axis_updown_randsuspend(AXIS_Z, 550,5000,1);
-    // delay(100);
-    // effect_axis_updown_randsuspend(AXIS_X, 550,5000,0);
-    // delay(100);
-    // effect_axis_updown_randsuspend(AXIS_X, 550,5000,1);
-    // delay(100);
-    // effect_axis_updown_randsuspend(AXIS_Y, 550,5000,0);
-    // delay(100);
-    // effect_axis_updown_randsuspend(AXIS_Y, 550,5000,1);
-    // delay(100);
-    // effect_boxside_randsend_parallel (AXIS_X, 0, 150, 1);
-    // delay(100);
-    // effect_boxside_randsend_parallel (AXIS_X, 1, 150, 1);
-    // delay(100);
-    // effect_boxside_randsend_parallel (AXIS_Y, 0, 150, 1);
-    // delay(100);
-    // effect_boxside_randsend_parallel (AXIS_Y, 1, 150, 1);
-    // delay(100);
-    // effect_boxside_randsend_parallel (AXIS_Z, 0, 150, 1);
-    // delay(100);
-    // effect_boxside_randsend_parallel (AXIS_Z, 1, 150, 1);
-    // delay(100);
 }
 
 int effect(String args)
