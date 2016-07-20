@@ -81,6 +81,7 @@ int effect(String args)
     } else {
         effectValue = value;
     }
+    sequenceValue = 2;
     return effectValue;
 }
 
