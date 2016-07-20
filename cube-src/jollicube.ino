@@ -26,9 +26,7 @@ const FP effects[FUNC_CNT] = {&effect_intro, &fireworks, &effect_rain, &effect_r
     &int_ripples, &side_ripples, &mirror_ripples, &quad_ripples, &effect_rand_patharound, &pyramid};
 
 //***********************************************************************************************************************
-void setup()
-{
-
+void setup() {
     pinMode(SPI_CS, OUTPUT);
     SPI.begin();
     randomSeed(analogRead(0));
@@ -49,15 +47,14 @@ void setup()
     Particle.variable("effect", currentEffect);
 }
 
-void loop()
-{
+void loop() {
     switch(sequenceValue) {
         case 0:
             // Go through effects in random order
             effectValue = random(FUNC_CNT - 1);
             break;
         case 1:
-            // Go through effects in fix order
+            // Go through effects in fixed order
             effectValue++;
             if (effectValue == FUNC_CNT) {
                 effectValue = 0;
@@ -75,8 +72,7 @@ void loop()
     delay(100);
 }
 
-int effect(String args)
-{
+int effect(String args) {
     int value = args.toInt();
     if (value >= 0 && value < FUNC_CNT) {
         effectValue = value;
@@ -117,17 +113,13 @@ int sequence(String args) {
     }
 }
 
-void display()
-{
-    for (byte y = 0 ; y < CUBE_SIZE ; y++)
-    {
+void display() {
+    for (byte y = 0 ; y < CUBE_SIZE ; y++) {
         byte b = 0;
-        for (byte x = 0 ; x < CUBE_SIZE ; x++)
-        {
+        for (byte x = 0 ; x < CUBE_SIZE ; x++) {
             //form data byte
             b = b << 1;
-            if (getvoxel(x,y,current_layer)==1)
-            {
+            if (getvoxel(x,y,current_layer)==1) {
                 b |= 1;
             }
         }
@@ -137,12 +129,12 @@ void display()
     maxTransferLEDCube(CUBE_SIZE - current_layer);
 
     current_layer++;
-    if (current_layer == 8)
+    if (current_layer == 8) {
         current_layer = 0;
+    }
 }
 
-void maxTransferAll(uint8_t address, uint8_t value)
-{
+void maxTransferAll(uint8_t address, uint8_t value) {
     digitalWrite(SPI_CS, LOW);
 
     for ( int c=1; c<= CUBE_SIZE;c++) {
@@ -153,12 +145,11 @@ void maxTransferAll(uint8_t address, uint8_t value)
     digitalWrite(SPI_CS, HIGH);
 }
 
-void maxTransferLEDCube(uint8_t address)
-{
+void maxTransferLEDCube(uint8_t address) {
     digitalWrite(SPI_CS, LOW);
 
-    for (int i=0; i<CUBE_SIZE; i++)   // Loop through our number of Max72xx ICs
-    {
+    // Loop through our number of Max72xx ICs
+    for (int i=0; i<CUBE_SIZE; i++) {
         SPI.transfer(address);
         SPI.transfer(value[CUBE_SIZE-i-1]);
     }
