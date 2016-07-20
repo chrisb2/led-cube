@@ -37,7 +37,7 @@ void setup()
     maxTransferAll(0x09, 0x00);   // Register 09 - BCD Decoding  // 0 = No decoding
     maxTransferAll(0x0B, 0x07);   // Register B - Scan limit 1-7  // 7 = All LEDS
     maxTransferAll(0x0C, 0x01);   // 01 = on 00 = Power saving mode or shutdown
-    maxTransferAll(0x0A, 0x0F);   // Set Brightness Intensity
+    maxTransferAll(0x0A, 0x00);   // Set Brightness Intensity
 
     timer.start();
 
@@ -63,6 +63,8 @@ void loop()
                 effectValue = 0;
             }
             break;
+        case 2:
+            // Single effect
         default:
             // Single effect
             break;
@@ -76,40 +78,43 @@ void loop()
 int effect(String args)
 {
     int value = args.toInt();
-    if (value < 0 || value >= FUNC_CNT) {
-        effectValue = 0;
-    } else {
+    if (value >= 0 && value < FUNC_CNT) {
         effectValue = value;
+        sequenceValue = 2;
+        return effectValue;
+    } else {
+        return -1;
     }
-    sequenceValue = 2;
-    return effectValue;
 }
 
 int brightness(String args) {
     int intensity = args.toInt();
-    if (intensity < 0 || intensity > MAX_INTENSITY) {
-        intensity = MAX_INTENSITY;
+    if (intensity >= 0 && intensity <= MAX_INTENSITY) {
+        maxTransferAll(0x0A, intensity);
+        return intensity;
+    } else {
+        return -1;
     }
-    maxTransferAll(0x0A, intensity);
-    return intensity;
 }
 
 int power(String args) {
     int power = args.toInt();
     if (power == 0 || power == 1) {
         maxTransferAll(0x0C, power);
+        return power;
     } else {
-        power = -1;
+        return -1;
     }
-    return power;
 }
 
 int sequence(String args) {
     int value = args.toInt();
-    if (value >= 0 || value < 2) {
+    if (value >= 0 && value <= 2) {
         sequenceValue = value;
+        return sequenceValue;
+    } else {
+        return -1;
     }
-    return sequenceValue;
 }
 
 void display()
