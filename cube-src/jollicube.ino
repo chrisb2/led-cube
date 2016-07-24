@@ -17,7 +17,10 @@ Timer timer(REFRESH_INTERVAL_MS, display);
 
 volatile int sequenceValue = 1; // in order
 volatile int effectValue = 0; // intro
+int brightnessValue = 0;
+int powerValue = 1;
 int currentEffect = effectValue;
+char state[70];
 
 typedef void (*FP)();
 
@@ -30,12 +33,13 @@ void setup() {
     pinMode(SPI_CS, OUTPUT);
     SPI.begin();
     randomSeed(analogRead(0));
+    updateState();
 
     maxTransferAll(0x0F, 0x00);   // 00 - Turn off Test mode
     maxTransferAll(0x09, 0x00);   // Register 09 - BCD Decoding  // 0 = No decoding
     maxTransferAll(0x0B, 0x07);   // Register B - Scan limit 1-7  // 7 = All LEDS
-    maxTransferAll(0x0C, 0x01);   // 01 = on 00 = Power saving mode or shutdown
-    maxTransferAll(0x0A, 0x00);   // Set Brightness Intensity
+    maxTransferAll(0x0C, powerValue);   // 01 = on 00 = Power saving mode or shutdown
+    maxTransferAll(0x0A, brightnessValue);   // Set Brightness Intensity
 
     timer.start();
 
@@ -45,6 +49,7 @@ void setup() {
     Particle.function("power", power);
 
     Particle.variable("effect", currentEffect);
+    Particle.variable("state", state);
 }
 
 void loop() {
@@ -68,6 +73,7 @@ void loop() {
     }
 
     currentEffect = effectValue;
+    updateState();
     effects[effectValue]();
     delay(100);
 }
@@ -84,20 +90,24 @@ int effect(String args) {
 }
 
 int brightness(String args) {
-    int intensity = args.toInt();
-    if (intensity >= 0 && intensity <= MAX_INTENSITY) {
-        maxTransferAll(0x0A, intensity);
-        return intensity;
+    int value = args.toInt();
+    if (value >= 0 && value <= MAX_INTENSITY) {
+        brightnessValue = value;
+        maxTransferAll(0x0A, brightnessValue);
+        updateState();
+        return brightnessValue;
     } else {
         return -1;
     }
 }
 
 int power(String args) {
-    int power = args.toInt();
-    if (power == 0 || power == 1) {
-        maxTransferAll(0x0C, power);
-        return power;
+    int value = args.toInt();
+    if (value == 0 || value == 1) {
+        powerValue = value;
+        maxTransferAll(0x0C, powerValue);
+        updateState();
+        return powerValue;
     } else {
         return -1;
     }
@@ -107,10 +117,16 @@ int sequence(String args) {
     int value = args.toInt();
     if (value >= 0 && value <= 2) {
         sequenceValue = value;
+        updateState();
         return sequenceValue;
     } else {
         return -1;
     }
+}
+
+void updateState() {
+    sprintf(state, "{\"powerOn\": %d, \"brightness\": %d, \"sequence\": %d, \"effect\": %d}",
+        powerValue, brightnessValue, sequenceValue, currentEffect);
 }
 
 void display() {
