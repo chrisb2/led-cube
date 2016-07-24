@@ -20,7 +20,7 @@ volatile int effectValue = 0; // intro
 int brightnessValue = 0;
 int powerValue = 1;
 int currentEffect = effectValue;
-char state[70];
+char state[75];
 
 typedef void (*FP)();
 
@@ -125,8 +125,8 @@ int sequence(String args) {
 }
 
 void updateState() {
-    sprintf(state, "{\"powerOn\": %d, \"brightness\": %d, \"sequence\": %d, \"effect\": %d}",
-        powerValue, brightnessValue, sequenceValue, currentEffect);
+    sprintf(state, "{\"powerOn\": %s, \"brightness\": %d, \"sequence\": %d, \"effect\": %d}",
+        (powerValue == 0) ? "false" : "true", brightnessValue, sequenceValue, currentEffect);
 }
 
 void display() {
