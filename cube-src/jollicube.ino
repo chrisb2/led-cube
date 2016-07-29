@@ -15,7 +15,7 @@ volatile int current_layer = 0;
 
 Timer timer(REFRESH_INTERVAL_MS, display);
 
-volatile int sequenceValue = 1; // in order
+volatile int sequenceValue = 0; // in order
 volatile int effectValue = 0; // intro
 int brightnessValue = 0;
 int powerValue = 1;
@@ -48,22 +48,21 @@ void setup() {
     Particle.function("brightness", brightness);
     Particle.function("power", power);
 
-    Particle.variable("effect", currentEffect);
     Particle.variable("state", state);
 }
 
 void loop() {
     switch(sequenceValue) {
         case 0:
-            // Go through effects in random order
-            effectValue = random(FUNC_CNT - 1);
-            break;
-        case 1:
-            // Go through effects in fixed order
+            // Go through effects in fixed sequencial order
             effectValue++;
             if (effectValue == FUNC_CNT) {
                 effectValue = 0;
             }
+            break;
+        case 1:
+            // Go through effects in random order
+            effectValue = random(FUNC_CNT - 1);
             break;
         case 2:
             // Single effect
@@ -91,9 +90,15 @@ int effect(String args) {
 
 int brightness(String args) {
     int value = args.toInt();
-    if (value >= 0 && value <= MAX_INTENSITY) {
-        brightnessValue = value;
-        maxTransferAll(0x0A, brightnessValue);
+    if (value >= -1 && value <= MAX_INTENSITY) {
+        if (value == -1) {
+            power("0");
+            brightnessValue = 0;
+        } else {
+            power("1");
+            brightnessValue = value;
+            maxTransferAll(0x0A, brightnessValue);
+        }
         updateState();
         return brightnessValue;
     } else {
