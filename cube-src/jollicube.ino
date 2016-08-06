@@ -46,7 +46,6 @@ void setup() {
     Particle.function("effect", effect);
     Particle.function("sequence", sequence);
     Particle.function("brightness", brightness);
-    Particle.function("power", power);
 
     Particle.variable("state", state);
 }
@@ -72,7 +71,6 @@ void loop() {
     }
 
     currentEffect = effectValue;
-    updateState();
     effects[effectValue]();
     delay(100);
 }
@@ -81,7 +79,9 @@ int effect(String args) {
     int value = args.toInt();
     if (value >= 0 && value < FUNC_CNT) {
         effectValue = value;
+        currentEffect = effectValue;
         sequenceValue = 2;
+        updateState();
         return effectValue;
     } else {
         return -1;
@@ -111,7 +111,6 @@ int power(String args) {
     if (value == 0 || value == 1) {
         powerValue = value;
         maxTransferAll(0x0C, powerValue);
-        updateState();
         return powerValue;
     } else {
         return -1;
@@ -132,6 +131,7 @@ int sequence(String args) {
 void updateState() {
     sprintf(state, "{\"powerOn\": %s, \"brightness\": %d, \"sequence\": %d, \"effect\": %d}",
         (powerValue == 0) ? "false" : "true", brightnessValue, sequenceValue, currentEffect);
+    Particle.publish("stateChange", state);
 }
 
 void display() {
